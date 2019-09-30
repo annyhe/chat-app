@@ -14,11 +14,11 @@ let db = new sqlite3.Database(DB_PATH, err => {
 }); 
 
 app.get("/", function(req, res) {
-    res.sendFile(path.join(__dirname+'/views/index.html'));
+    res.send(path.join(__dirname+'/index.html'));
     //__dirname : It will resolve to your project folder. 
 });
 
-app.use(express.static(path.join(__dirname, '../views')));
+app.use(express.static('public'))
 
 io.sockets.on("connection", function(socket) {
   socket.on("username", function(username) {
