@@ -1,8 +1,10 @@
 import React, {useState} from 'react'
 import openSocket from 'socket.io-client'
 import './chatroom.css'
+import logo from './logo.svg'
+import logoTwo from './logo192.png'
 const socket = openSocket('http://localhost:8080')
-const USER_AVATAR = 'https://i.pravatar.cc/150?img=32'
+const USER_AVATAR = logo
 const FLAG = {
     pic: { tag: '@pic', url: 'https://source.unsplash.com/random/800x600?' },
 }
@@ -88,33 +90,6 @@ class InputMessage extends React.Component {
     }
 }
 
-/* TypingIndicator component */
-function TypingIndicator({ isTyping, owner }) {
-    let typersDisplay = ''
-    let countTypers = 0
-    /* for each user writing messages in chatroom */
-    for (let key in isTyping) {
-        /* retrieve the name if it isn't the owner of the chatbox */
-        if (key !== owner && isTyping[key]) {
-            typersDisplay += ', ' + key
-            countTypers++
-        }
-    }
-    /* formatting text */
-    typersDisplay = typersDisplay.substr(1)
-    typersDisplay += countTypers > 1 ? ' are ' : ' is '
-    /* if at least one other person writes */
-    if (countTypers > 0) {
-        return (
-            <div className={'chatApp__convTyping'}>
-                {typersDisplay} writing
-                <span className={'chatApp__convTypingDot'} />
-            </div>
-        )
-    }
-    return <div className={'chatApp__convTyping'} />
-}
-
 /* MessageList component - contains all messages */
 function MessageList({ owner, messages }) {
     return (
@@ -161,11 +136,10 @@ function MessageItem({ owner, sender, senderAvatar, message }) {
     )
 }
 
-/* ChatBox component - composed of Title, MessageList, TypingIndicator, InputMessage */
+/* ChatBox component - composed of Title, MessageList, InputMessage */
 function ChatBox({
     owner,
     messages,
-    isTyping,
     ownerAvatar,
     sendMessage,
     typing,
@@ -185,7 +159,6 @@ function ChatBox({
             <Title owner={owner} />
             <MessageList owner={owner} messages={messages} />
             <div className={'chatApp__convSendMessage clearfix'}>
-                <TypingIndicator owner={owner} isTyping={isTyping} />
                 <InputMessage
                     isLoading={isLoading}
                     owner={owner}
@@ -203,38 +176,7 @@ function ChatBox({
 /* ChatRoom component - composed of multiple ChatBoxes */
 class ChatRoom extends React.Component {
     state = {
-        messages: [
-            {
-                id: 1,
-                sender: 'Shun',
-                senderAvatar: 'https://i.pravatar.cc/150?img=32',
-                message: 'Hello 👋',
-            },
-            {
-                id: 2,
-                sender: 'Gabe',
-                senderAvatar: 'https://i.pravatar.cc/150?img=56',
-                message: 'Hey!',
-            },
-            {
-                id: 3,
-                sender: 'Gabe',
-                senderAvatar: 'https://i.pravatar.cc/150?img=56',
-                message: 'How are you?',
-            },
-            {
-                id: 4,
-                sender: 'Shun',
-                senderAvatar: 'https://i.pravatar.cc/150?img=32',
-                message: "Great! It's been a while... 🙃",
-            },
-            {
-                id: 5,
-                sender: 'Gabe',
-                senderAvatar: 'https://i.pravatar.cc/150?img=56',
-                message: "Indeed.... We're gonna have to fix that. 🌮🍻",
-            },
-        ],
+        messages: [],
         isTyping: [],
         username: '',
     }
@@ -242,8 +184,11 @@ class ChatRoom extends React.Component {
         // append the chat text message
         const self = this
         socket.on('chat_message', function(msg) {
-            console.log('append message', msg, self.state.username)
-            self.sendMessage(self.state.username, USER_AVATAR, msg)
+            const arr = msg.split(':');
+            const _msg = arr[1].slice(1)
+            let user = arr[0].slice('<strong>'.length, arr[0].length- '</strong>'.length)
+            console.log('append message', _msg)
+            self.sendMessage(user, USER_AVATAR, msg)
             // GET the image
             let tag = FLAG.pic.tag
             if (msg.includes(tag)) {
@@ -261,11 +206,10 @@ class ChatRoom extends React.Component {
         })
 
         socket.on('notify everyone', function(msg) {
-            console.log('got new message', msg)
             self.sendMessage(self.state.username, USER_AVATAR, msg)
         })
-        // ask username
-        const username = prompt('Please tell me your name')
+        // ask username. disabled for testing
+        const username = '' + Math.random(); // prompt('Please tell me your name')
         socket.emit('username', username)
         this.setState({ username })
     }

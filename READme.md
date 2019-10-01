@@ -11,11 +11,11 @@ Credit
 - socket.io and express setup based on https://itnext.io/build-a-group-chat-app-in-30-lines-using-node-js-15bfe7a2417b
 
 TODO
+- 'joined the chat' should be on the other side, unless is owner
+- add URL column for avatar on sqlite table
 - make input expand to entire width of the box
-- make MessageList component handle images
-- need list of users? or only need to figure out the current one?
-- avatar: change to random one, non-gender specific
-- remove default messages in ChatRoom component
+- make MessageList component handle images  
+- avatar: change to random, non-gender specific 
 - add screenshots to READme
 - add API, UI tests
 
