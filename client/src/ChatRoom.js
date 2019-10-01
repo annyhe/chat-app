@@ -1,10 +1,7 @@
 import React, {useState} from 'react'
 import openSocket from 'socket.io-client'
 import './chatroom.css'
-import logo from './logo.svg'
-import logoTwo from './logo192.png'
 const socket = openSocket('http://localhost:8080')
-const USER_AVATAR = logo
 const FLAG = {
     pic: { tag: '@pic', url: 'https://source.unsplash.com/random/800x600?' },
 }
@@ -113,7 +110,6 @@ function MessageList({ owner, messages }) {
 /* MessageItem component - composed of a message and the sender's avatar */
 // TODO: make className optional for div.chatApp__convMessageValue
 function MessageItem({ owner, sender, senderAvatar, message }) {
-    console.log(message)
     /* message position formatting - right if I'm the author */
     let messagePosition =
         owner === sender
@@ -204,12 +200,14 @@ class ChatRoom extends React.Component {
 
         socket.on('is_online', function(msg) {
             const obj = JSON.parse(msg);
+            const pronoun = self.state.username  === obj.user ? 'You' : obj.user
             const markup = obj.joinOrLeave ? 
-            '🔵 <i>' + obj.user + ' join the chat..</i>' :
+            '🔵 <i>' + pronoun + ' joined the chat..</i>' :
              '🔴 <i>' + obj.user + ' left the chat..</i>'
             self.sendMessage(obj.user, obj.url, markup)
-            self.setState({ username, avatar: obj.url })            
-            
+            if (obj.joinOrLeave) {
+                self.setState({ username, avatar: obj.url || self.state.avatar })            
+            }
         })
 
         socket.on('notify everyone', function(msg) {

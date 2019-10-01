@@ -23,8 +23,8 @@ let db = new sqlite3.Database(DB_PATH, err => {
 
 // Uncomment this section to create table in sqlite
 // db.run(
-//     'CREATE TABLE IF NOT EXISTS ChatMessages(id INTEGER PRIMARY KEY AUTOINCREMENT, username TEXT, message text)',
-//     function() {
+//     "CREATE TABLE IF NOT EXISTS ChatMessages(id INTEGER PRIMARY KEY AUTOINCREMENT, username text, message text, avatar text)",
+//     () => {
 //         console.log('successful')
 //     }
 // )
@@ -35,26 +35,36 @@ app.get('/', function(req, res) {
 
 app.use(express.static('public'))
 
-
 io.sockets.on('connection', function(socket) {
-    let avatar = '';
+    let avatar = ''
     socket.on('username', function(username) {
         if (username) {
             socket.username = username
-            fetch('http://api.adorable.io/avatars/285/' + socket.username + '.png', {
-                headers: {
-                    Accept: 'application/json',
-                    'Content-Type': 'application/json',
-                },
-            })
-                .then((obj) => {
+            fetch(
+                'http://api.adorable.io/avatars/285/' +
+                    socket.username +
+                    '.png',
+                {
+                    headers: {
+                        Accept: 'application/json',
+                        'Content-Type': 'application/json',
+                    },
+                }
+            )
+                .then(obj => {
                     avatar = obj.url
                     io.emit(
                         'is_online',
-                        JSON.stringify({ user: socket.username , joinOrLeave: true, url: avatar })            
+                        JSON.stringify({
+                            user: socket.username,
+                            joinOrLeave: true,
+                            url: avatar,
+                        })
                     )
                 })
-                .catch((err) => console.log('GET profile picture failed. Error is ' + err))
+                .catch(err =>
+                    console.log('GET profile picture failed. Error is ' + err)
+                )
         }
     })
 
@@ -62,15 +72,19 @@ io.sockets.on('connection', function(socket) {
         if (socket.username) {
             io.emit(
                 'is_online',
-                JSON.stringify({ user: socket.username , joinOrLeave: false })
-            )    
+                JSON.stringify({
+                    user: socket.username,
+                    joinOrLeave: false,
+                    url: avatar,
+                })
+            )
         }
     })
 
     socket.on('chat_message', function(message) {
         io.emit(
-            'chat_message', JSON.stringify({ username: socket.username, message, avatar })
-            // '<strong>' + socket.username + '</strong>: ' + message
+            'chat_message',
+            JSON.stringify({ username: socket.username, message, avatar })
         )
 
         let url = ''
@@ -105,19 +119,22 @@ io.sockets.on('connection', function(socket) {
                 .catch(console.log)
         }
 
-        db.run(
-            `INSERT INTO ChatMessages(username, message) VALUES(?, ?)`,
-            [socket.username, message],
-            function(error) {
-                if (error) {
-                    console.log(error)
-                } else {
-                    console.log(
-                        'Insert successful. # of Row Changes: ' + this.changes
-                    )
+        if (username) {
+            db.run(
+                `INSERT INTO ChatMessages(username, message, avatar) VALUES(?, ?, ?)`,
+                [socket.username, message, avatar],
+                function(error) {
+                    if (error) {
+                        console.log(error)
+                    } else {
+                        console.log(
+                            'Insert successful. # of Row Changes: ' +
+                                this.changes
+                        )
+                    }
                 }
-            }
-        )
+            )
+        }
     })
 })
 

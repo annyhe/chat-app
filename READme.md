@@ -11,11 +11,12 @@ Credit
 - socket.io and express setup based on https://itnext.io/build-a-group-chat-app-in-30-lines-using-node-js-15bfe7a2417b
 
 TODO
-- @picCat: on the other side, should not have the blue background
+Refactor database to 2 tables:
+1. Users: ID, username text, avatar text
+2. Messages: ID, ID of username, message text
 - sticky footer, move component outside of chat
-- change 'username joined the chat' to **You** joined the
-- add URL column for avatar on sqlite table
-  - specific users and avatars for quoteBot, jokeBot, and picBot
+- @picCat: on the other side, should not have the blue background
+- specific users and avatars for quoteBot, jokeBot, and picBot
 - add screenshots to READme
 - add API, UI tests
 
@@ -31,8 +32,8 @@ TODO
 
 ```javascript
 db.run(
-  "CREATE TABLE IF NOT EXISTS ChatMessages(id INTEGER PRIMARY KEY AUTOINCREMENT, username TEXT, message text)",
-  function() {
+  "CREATE TABLE IF NOT EXISTS ChatMessages(id INTEGER PRIMARY KEY AUTOINCREMENT, username text, message text, avatar text)",  
+  () => {
     console.log("successful");
   }
 );
