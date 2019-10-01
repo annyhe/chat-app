@@ -6,6 +6,9 @@ const sqlite3 = require('sqlite3').verbose()
 const path = require('path')
 const DB_PATH = './sqliteChatBot.db'
 const fetch = require('node-fetch')
+const JOKE_URL = 'https://icanhazdadjoke.com/'
+const QUOTE_URL = 'http://quotes.rest/qod.json?category='
+
 // images are fetched on client-side, since on server-side unsplash requires API key
 const FLAG = {
     joke: '@joke',
@@ -20,7 +23,6 @@ let db = new sqlite3.Database(DB_PATH, err => {
 
 app.get('/', function(req, res) {
     res.send(path.join(__dirname + '/index.html'))
-    //__dirname : It will resolve to your project folder.
 })
 
 app.use(express.static('public'))
@@ -59,7 +61,7 @@ io.sockets.on('connection', function(socket) {
                 flagWithQuery.length
             )
             console.log('GET quote with', category)
-            url = 'http://quotes.rest/qod.json?category=' + category
+            url = QUOTE_URL + category
             callback = json => {
                 /* Sample error
                 { error:
@@ -74,14 +76,15 @@ io.sockets.on('connection', function(socket) {
                     )
                 } else {
                     const { quote, author } = json.contents.quotes[0]
-                    console.log(quote, author)
+                    io.emit("notify everyone", quote + ' By ' + author)                    
                 }
             }
         } else if (message.includes(FLAG.joke)) {
-            url = 'https://icanhazdadjoke.com/'
+            url = JOKE_URL
             callback = (json) => {
                 if (json.status === 200) {
-                    console.log(json.joke)
+                    // console.log(json.joke)
+                    io.emit("notify everyone", json.joke)                    
                 } else {
                     console.log('GET joke failed.')
                 }

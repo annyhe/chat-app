@@ -19,6 +19,12 @@ function App() {
             document.getElementById('messages').appendChild(listEl)
         });
 
+        socket.on('notify everyone',function(msg){
+            console.log('got new message');
+            const listEl = document.createElement('li')
+            listEl.innerHTML = msg
+            document.getElementById('messages').appendChild(listEl)
+        });
         // ask username
         const username = prompt('Please tell me your name')
         socket.emit('username', username)
