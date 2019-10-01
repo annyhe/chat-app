@@ -20,6 +20,16 @@ let db = new sqlite3.Database(DB_PATH, err => {
     }
     console.log('Connected to the ' + DB_PATH + ' SQlite database.')
 })
+/**
+ * Uncomment this section to create the messages table
+db.run(
+    "CREATE TABLE IF NOT EXISTS ChatMessages(id INTEGER PRIMARY KEY AUTOINCREMENT, username TEXT, message text)",
+    function() {
+      console.log("successful");
+    }
+  );
+
+ */ 
 
 app.get('/', function(req, res) {
     res.send(path.join(__dirname + '/index.html'))
@@ -55,7 +65,7 @@ io.sockets.on('connection', function(socket) {
             const flagWithQuery = message
                 .split(' ')
                 .filter(word => word.startsWith(FLAG.quote))[0]
-            // query is @picTHIS_PART_OF_STRING
+
             const category = flagWithQuery.slice(
                 FLAG.quote.length,
                 flagWithQuery.length

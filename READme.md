@@ -5,12 +5,15 @@
 TODO
 - Extend to make it more slack-like. Ie. @inspiration to get inspirational message, or @imageCat to get image of a cat from unsplash
 - UI can be better, ie. make it more obvious who is talking. Anyone other than the current person should be in a separate column
-- @quote needs to return parameterized quote, not only random quote, which seems to remain identical from one request to the next
+- quote API: find another API that doesn't have as much limits
+- apply CSS to image, so vertical images are not cut off at the top
 - add API, UI tests
 
-### Learned
+### Setup
 
-**How to create tables in Sqlite3 npm package**
+1. Create a blank **sqliteChatBot.db** at the root of the folder
+
+2. Create tables in Sqlite3. Uncomment this section in **index.js**
 
 db.run(
   "CREATE TABLE IF NOT EXISTS ChatMessages(id INTEGER PRIMARY KEY AUTOINCREMENT, username TEXT, message text)",
