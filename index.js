@@ -37,17 +37,20 @@ app.use(express.static('public'))
 
 io.sockets.on('connection', function(socket) {
     socket.on('username', function(username) {
-        socket.username = username
-        io.emit(
-            'is_online',
-            '🔵 <i>' + socket.username + ' join the chat..</i>'
-        )
+        if (username) {
+            socket.username = username
+            
+            io.emit(
+                'is_online',
+                JSON.stringify({user: socket.username , joinOrLeave: true})            
+            )
+        }
     })
 
     socket.on('disconnect', function() {
         io.emit(
             'is_online',
-            '🔴 <i>' + socket.username + ' left the chat..</i>'
+            JSON.stringify({user: socket.username , joinOrLeave: false})
         )
     })
 

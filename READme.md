@@ -11,7 +11,6 @@ Credit
 - socket.io and express setup based on https://itnext.io/build-a-group-chat-app-in-30-lines-using-node-js-15bfe7a2417b
 
 TODO
-- 'joined the chat' should be on the other side, unless is owner
 - add URL column for avatar on sqlite table
 - make input expand to entire width of the box
 - make MessageList component handle images  

@@ -187,7 +187,6 @@ class ChatRoom extends React.Component {
             const arr = msg.split(':');
             const _msg = arr[1].slice(1)
             let user = arr[0].slice('<strong>'.length, arr[0].length- '</strong>'.length)
-            console.log('append message', _msg)
             self.sendMessage(user, USER_AVATAR, msg)
             // GET the image
             let tag = FLAG.pic.tag
@@ -202,7 +201,12 @@ class ChatRoom extends React.Component {
         })
 
         socket.on('is_online', function(msg) {
-            self.sendMessage(self.state.username, USER_AVATAR, msg)
+            const obj = JSON.parse(msg);
+            const markup = obj.joinOrLeave ? 
+            '🔵 <i>' + obj.user + ' join the chat..</i>' :
+             '🔴 <i>' + obj.user + ' left the chat..</i>'
+            
+            self.sendMessage(obj.user, USER_AVATAR, markup)
         })
 
         socket.on('notify everyone', function(msg) {
@@ -224,7 +228,7 @@ class ChatRoom extends React.Component {
                 senderAvatar: senderAvatar,
                 message: messageFormat,
             }
-            console.log(message, messageFormat)
+            // console.log(message, messageFormat)
             this.setState({
                 messages: [...this.state.messages, newMessageItem],
             })
