@@ -11,7 +11,11 @@ Credit
 - socket.io and express setup based on https://itnext.io/build-a-group-chat-app-in-30-lines-using-node-js-15bfe7a2417b
 
 TODO
-- UI can be better, ie. make it more obvious who is talking. Anyone other than the current person should be in a separate column
+- make input expand to entire width of the box
+- make "X's display" dynamic
+- avatar: change to random one, non-gender specific
+- remove default messages in ChatRoom component
+- add the socket.io part to Chatroom component
 - add screenshots to READme
 - add API, UI tests
 
@@ -33,10 +37,10 @@ db.run(
   }
 );
 ```
-5. Open two terminal tabs. Fire up the client with **npm run client** in one terminal, and the server with  **node index.js**
+5. Open two terminal tabs. Fire up the client with **npm run client** in one terminal, and the server with  **node index.js** in another terminal
 
-6. Head over to a browser and enter http://localhost:3000/, then your username
+6. Head over to a browser and enter http://localhost:3000/, then enter your username in the prompt.
 
-7. To join as another user, open another browser tab/window. Enter http://localhost:3000/, enter another username
+7. To join as another user, open another browser tab/window. Enter http://localhost:3000/, enter another username in the prompt.
 
-8. Enter your message and hit **Enter** to send the message to all. You can also type in **@picIMAGE_QUERY**, **@quote** to get random famous quote, or **@joke** to get random joke
+8. Enter your message and hit **Enter** to send the message to all. You can also type in **@picIMAGE_QUERY**, **@quote** to get random famous quote, or **@joke** to get random joke.

@@ -8,15 +8,11 @@ function detectURL(message) {
   });
 }
 
-/* ========== */
 /* Title component */
 function Title({ owner }) {
   return <div className={"chatApp__convTitle"}>{owner}'s display</div>;
-}
-/* end Title component */
-/* ========== */
+} 
 
-/* ========== */
 /* InputMessage component - used to type the message */
 class InputMessage extends React.Component {
   handleSendMessage = event => {
@@ -32,7 +28,7 @@ class InputMessage extends React.Component {
       this.messageInput.value = "";
     }
   };
-  handleTyping = event => {
+  handleTyping = () => {
     /* Tell users when another user has at least started to write */
     if (this.messageInput.value.length > 0) {
       this.props.typing(this.ownerInput.value);
@@ -78,10 +74,7 @@ class InputMessage extends React.Component {
     );
   }
 }
-/* end InputMessage component */
-/* ========== */
 
-/* ========== */
 /* TypingIndicator component */
 function TypingIndicator({ isTyping, owner }) {
   let typersDisplay = "";
@@ -108,10 +101,7 @@ function TypingIndicator({ isTyping, owner }) {
   }
   return <div className={"chatApp__convTyping"} />;
 }
-/* end TypingIndicator component */
-/* ========== */
 
-/* ========== */
 /* MessageList component - contains all messages */
 function MessageList({ owner, messages }) {
   return (
@@ -131,10 +121,7 @@ function MessageList({ owner, messages }) {
     </div>
   );
 }
-/* end MessageList component */
-/* ========== */
 
-/* ========== */
 /* MessageItem component - composed of a message and the sender's avatar */
 function MessageItem({ owner, sender, senderAvatar, message }) {
   /* message position formatting - right if I'm the author */
@@ -158,10 +145,7 @@ function MessageItem({ owner, sender, senderAvatar, message }) {
     </div>
   );
 }
-/* end MessageItem component */
-/* ========== */
 
-/* ========== */
 /* ChatBox component - composed of Title, MessageList, TypingIndicator, InputMessage */
 class ChatBox extends React.Component {
   state = {
@@ -198,11 +182,8 @@ class ChatBox extends React.Component {
       </div>
     );
   }
-}
-/* end ChatBox component */
-/* ========== */
+} 
 
-/* ========== */
 /* ChatRoom component - composed of multiple ChatBoxes */
 class ChatRoom extends React.Component {
   state = {
