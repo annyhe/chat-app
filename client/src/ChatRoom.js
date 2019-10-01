@@ -181,22 +181,23 @@ class ChatRoom extends React.Component {
         messages: [],
         isTyping: [],
         username: '',
+        avatar: '',
     }
     componentDidMount = () => {
         // append the chat text message
         const self = this
         socket.on('chat_message', function(msg) {
-            const arr = msg.split(':');
-            let user = arr[0].slice('<strong>'.length, arr[0].length- '</strong>'.length)
-            self.sendMessage(user, USER_AVATAR, msg)
+            const obj = JSON.parse(msg);
+            const {username, message, avatar} = obj
+            
+            self.sendMessage(username, avatar, message)
             // GET the image
             let tag = FLAG.pic.tag
-            const _msg = arr[1].slice(1)
-            if (msg.includes(tag)) {
-                getImage(_msg, tag).then(url => {
+            if (message.includes(tag)) {
+                getImage(message, tag).then(url => {
                     const imageEl = document.createElement('img')
                     imageEl.src = url
-                    self.sendMessage(user, USER_AVATAR, imageEl.outerHTML, true)                    
+                    self.sendMessage(username, avatar, imageEl.outerHTML, true)                    
                 })
             }
         })
@@ -206,12 +207,13 @@ class ChatRoom extends React.Component {
             const markup = obj.joinOrLeave ? 
             '🔵 <i>' + obj.user + ' join the chat..</i>' :
              '🔴 <i>' + obj.user + ' left the chat..</i>'
+            self.sendMessage(obj.user, obj.url, markup)
+            self.setState({ username, avatar: obj.url })            
             
-            self.sendMessage(obj.user, USER_AVATAR, markup)
         })
 
         socket.on('notify everyone', function(msg) {
-            self.sendMessage(self.state.username, USER_AVATAR, msg)
+            self.sendMessage(self.state.username, self.state.avatar, msg)
         })
 
         // TODO: switch back to prompt('Please tell me your name')
@@ -259,7 +261,7 @@ class ChatRoom extends React.Component {
 
         const user = {
             name: this.state.username || 'unamed_watermelon',
-            avatar: USER_AVATAR,
+            avatar: this.state.avatar,
         }
         return (
             <div className={'chatApp__room'}>

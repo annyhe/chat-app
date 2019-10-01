@@ -35,15 +35,26 @@ app.get('/', function(req, res) {
 
 app.use(express.static('public'))
 
+
 io.sockets.on('connection', function(socket) {
+    let avatar = '';
     socket.on('username', function(username) {
         if (username) {
             socket.username = username
-            
-            io.emit(
-                'is_online',
-                JSON.stringify({user: socket.username , joinOrLeave: true})            
-            )
+            fetch('http://api.adorable.io/avatars/285/' + socket.username + '.png', {
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
+                },
+            })
+                .then((obj) => {
+                    avatar = obj.url
+                    io.emit(
+                        'is_online',
+                        JSON.stringify({ user: socket.username , joinOrLeave: true, url: avatar })            
+                    )
+                })
+                .catch((err) => console.log('GET profile picture failed. Error is ' + err))
         }
     })
 
@@ -51,15 +62,15 @@ io.sockets.on('connection', function(socket) {
         if (socket.username) {
             io.emit(
                 'is_online',
-                JSON.stringify({user: socket.username , joinOrLeave: false})
+                JSON.stringify({ user: socket.username , joinOrLeave: false })
             )    
         }
     })
 
     socket.on('chat_message', function(message) {
         io.emit(
-            'chat_message',
-            '<strong>' + socket.username + '</strong>: ' + message
+            'chat_message', JSON.stringify({ username: socket.username, message, avatar })
+            // '<strong>' + socket.username + '</strong>: ' + message
         )
 
         let url = ''

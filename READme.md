@@ -13,9 +13,8 @@ Credit
 TODO
 - @picCat: on the other side, should not have the blue background
 - sticky footer, move component outside of chat
-
+- change 'username joined the chat' to **You** joined the
 - add URL column for avatar on sqlite table
-- avatar: change to random, non-gender specific when user joins
   - specific users and avatars for quoteBot, jokeBot, and picBot
 - add screenshots to READme
 - add API, UI tests
