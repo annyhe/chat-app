@@ -50,3 +50,6 @@ db.run(
 7. To join as another user, open another browser tab/window. Enter http://localhost:3000/, enter another username in the prompt.
 
 8. Enter your message and hit **Enter** to send the message to all. You can also type in **@picIMAGE_QUERY**, **@quote** to get random famous quote, or **@joke** to get random joke.
+
+Enjoy! 
+Please use the issues https://github.com/annyhe/chat-app/issues to record any bugs, feature requests, etc.
