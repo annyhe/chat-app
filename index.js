@@ -48,10 +48,12 @@ io.sockets.on('connection', function(socket) {
     })
 
     socket.on('disconnect', function() {
-        io.emit(
-            'is_online',
-            JSON.stringify({user: socket.username , joinOrLeave: false})
-        )
+        if (socket.username) {
+            io.emit(
+                'is_online',
+                JSON.stringify({user: socket.username , joinOrLeave: false})
+            )    
+        }
     })
 
     socket.on('chat_message', function(message) {

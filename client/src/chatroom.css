@@ -53,7 +53,7 @@ body {
     display: flex;
     align-content: flex-start;
     justify-content: center;
-    padding: 5rem 20rem;
+    padding: 2rem 20rem;
     animation: fadeChatApp 0.6s ease-in-out;
     animation-fill-mode: forwards;
 }
@@ -87,7 +87,7 @@ body {
 }
 .chatApp__convTimeline {
     display: flex;
-    height: 400px;
+    height: 80vh;
     padding: 1rem;
     border-top-left-radius: 8px;
     border-top-right-radius: 8px;
@@ -193,8 +193,12 @@ body {
     padding: 1rem;
 }
 form {
-    width: 380px;
-    border-radius: 16px;
+    padding: 1rem;
+    border-top: 1px solid gray;
+    bottom: 0;
+    position: relative;
+    width: 100%;
+    border-color: #000;    
 }
 .chatApp__convInput {
     float: left;
@@ -257,9 +261,9 @@ form {
     background-color: #3c559c;
 }
 .chatApp__convButton span {
-    display: block;
+    /* display: block;
     position: absolute;
-    top: 6px;
+    top: 6px; */
 }
 .chatApp__convButton--loading {
     cursor: wait;

@@ -11,10 +11,12 @@ Credit
 - socket.io and express setup based on https://itnext.io/build-a-group-chat-app-in-30-lines-using-node-js-15bfe7a2417b
 
 TODO
+- @picCat: on the other side, should not have the blue background
+- sticky footer, move component outside of chat
+
 - add URL column for avatar on sqlite table
-- make input expand to entire width of the box
-- make MessageList component handle images  
-- avatar: change to random, non-gender specific 
+- avatar: change to random, non-gender specific when user joins
+  - specific users and avatars for quoteBot, jokeBot, and picBot
 - add screenshots to READme
 - add API, UI tests
 

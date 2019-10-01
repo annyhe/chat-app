@@ -111,7 +111,9 @@ function MessageList({ owner, messages }) {
 }
 
 /* MessageItem component - composed of a message and the sender's avatar */
+// TODO: make className optional for div.chatApp__convMessageValue
 function MessageItem({ owner, sender, senderAvatar, message }) {
+    console.log(message)
     /* message position formatting - right if I'm the author */
     let messagePosition =
         owner === sender
@@ -185,17 +187,16 @@ class ChatRoom extends React.Component {
         const self = this
         socket.on('chat_message', function(msg) {
             const arr = msg.split(':');
-            const _msg = arr[1].slice(1)
             let user = arr[0].slice('<strong>'.length, arr[0].length- '</strong>'.length)
             self.sendMessage(user, USER_AVATAR, msg)
             // GET the image
             let tag = FLAG.pic.tag
+            const _msg = arr[1].slice(1)
             if (msg.includes(tag)) {
-                getImage(msg, tag).then(url => {
+                getImage(_msg, tag).then(url => {
                     const imageEl = document.createElement('img')
                     imageEl.src = url
-                    // TODO: make MessageList component handle images
-                    self.sendMessage(self.state.username, USER_AVATAR, url)                    
+                    self.sendMessage(user, USER_AVATAR, imageEl.outerHTML, true)                    
                 })
             }
         })
@@ -212,23 +213,23 @@ class ChatRoom extends React.Component {
         socket.on('notify everyone', function(msg) {
             self.sendMessage(self.state.username, USER_AVATAR, msg)
         })
-        // ask username. disabled for testing
-        const username = '' + Math.random(); // prompt('Please tell me your name')
+
+        // TODO: switch back to prompt('Please tell me your name')
+        const username = '' + Math.random(); 
         socket.emit('username', username)
         this.setState({ username })
     }
 
     /* adds a new message to the chatroom */
-    sendMessage = (sender, senderAvatar, message) => {
+    sendMessage = (sender, senderAvatar, message, skipFormatting) => {
         setTimeout(() => {
-            let messageFormat = detectURL(message)
+            let messageFormat = skipFormatting ? message : detectURL(message)
             let newMessageItem = {
                 id: this.state.messages.length + 1,
                 sender: sender,
                 senderAvatar: senderAvatar,
                 message: messageFormat,
             }
-            // console.log(message, messageFormat)
             this.setState({
                 messages: [...this.state.messages, newMessageItem],
             })
