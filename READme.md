@@ -1,12 +1,10 @@
 # Real time chat app using Socket.io, Nodejs
 
-- Database: use sqlite for testing. Stores username and messages
+- Database: use **sqlite** for testing. Stores username and messages
 
 TODO
 - Extend to make it more slack-like. Ie. @inspiration to get inspirational message, or @imageCat to get image of a cat from unsplash
 - UI can be better, ie. make it more obvious who is talking. Anyone other than the current person should be in a separate column
-- quote API: find another API that doesn't have as much limits
-- apply CSS to image, so vertical images are not cut off at the top
 - add API, UI tests
 
 ### Setup
