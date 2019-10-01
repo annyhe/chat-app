@@ -59,13 +59,14 @@ class ChatRoom extends React.Component {
             '🔵 <i>' + pronoun + ' joined the chat..</i>' :
              '🔴 <i>' + obj.user + ' left the chat..</i>'
             self.sendMessage(obj.user, obj.url, markup)
-            if (obj.joinOrLeave) {
+            if (obj.joinOrLeave && !self.state.username) {
                 self.setState({ username, avatar: obj.url || self.state.avatar })            
             }
         })
 
         socket.on('notify everyone', function(msg) {
-            self.sendMessage(self.state.username, self.state.avatar, msg)
+            const obj = JSON.parse(msg)
+            self.sendMessage(obj.username, obj.avatar, obj.quote)
         })
 
         // testing: switch back to '' + Math.random(); 

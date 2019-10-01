@@ -29,7 +29,6 @@ function MessageList({ owner, messages }) {
 /* MessageItem component - composed of a message and the sender's avatar */
 // TODO: make className optional for div.chatApp__convMessageValue
 function MessageItem({ owner, sender, senderAvatar, message }) {
-    console.log(message, senderAvatar)
     /* message position formatting - right if I'm the author */
     let messagePosition =
         owner === sender

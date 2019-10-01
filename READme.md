@@ -12,8 +12,8 @@ Credit
 
 TODO
 Refactor database to 2 tables:
-1. Users: ID, username text, avatar text
-2. Messages: ID, ID of username, message text
+1. Users: ID, username text, avatar text. Need this table to remove and add users
+2. Messages: ID, user ID or username if unique, message text. Have most fields in this table except for user ID
 
 - UI: show which users are there, to disallow multiple users
 - sticky footer, move component outside of chat

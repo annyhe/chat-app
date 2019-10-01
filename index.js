@@ -94,14 +94,27 @@ io.sockets.on('connection', function(socket) {
             console.log('GET quote')
             url = QUOTE_URL
             callback = json => {
-                io.emit('notify everyone', json.content + ' By ' + json.author)
+                io.emit(
+                    'notify everyone',
+                    JSON.stringify({
+                        quote: json.content + ' By ' + json.author,
+                        avatar,
+                        username: socket.username,
+                    })
+                )
             }
         } else if (message.includes(FLAG.joke)) {
             url = JOKE_URL
             callback = json => {
                 if (json.status === 200) {
-                    // console.log(json.joke)
-                    io.emit('notify everyone', json.joke)
+                    io.emit(
+                        'notify everyone',
+                        JSON.stringify({
+                            quote: json.joke,
+                            avatar,
+                            username: socket.username,
+                        })
+                    )
                 } else {
                     console.log('GET joke failed.')
                 }
