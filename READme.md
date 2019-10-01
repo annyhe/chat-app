@@ -1,5 +1,7 @@
 # Real time chat app using Socket.io, Nodejs
 
+See it in action! [![Chat app with Express, NodeJS, and socket.io](https://img.youtube.com/vi/K8s_DIN_N8w/0.jpg)](https://www.youtube.com/watch?v=K8s_DIN_N8w)
+
 Overview
 - Database: use **sqlite** for testing. Stores username and messages
 - Tested on Chrome
