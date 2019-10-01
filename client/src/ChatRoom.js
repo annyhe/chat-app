@@ -1,6 +1,7 @@
-import React, {useState} from 'react'
-import openSocket from 'socket.io-client'
+import React from 'react'
+import { ChatBox } from './UtilComp'
 import './chatroom.css'
+import openSocket from 'socket.io-client'
 const socket = openSocket('http://localhost:8080')
 const FLAG = {
     pic: { tag: '@pic', url: 'https://source.unsplash.com/random/800x600?' },
@@ -22,153 +23,6 @@ function detectURL(message) {
     return message.replace(urlRegex, function(urlMatch) {
         return '<a href="' + urlMatch + '">' + urlMatch + '</a>'
     })
-}
-
-/* Title component */
-function Title({ owner }) {
-    return <div className={'chatApp__convTitle'}>{owner}'s display</div>
-}
-
-/* InputMessage component - used to type the message */
-class InputMessage extends React.Component {
-    handleSendMessage = event => {
-        event.preventDefault()
-        /* Disable sendMessage if the message is empty */
-        if (this.messageInput.value.length > 0) {
-            socket.emit('chat_message', this.messageInput.value)
-            /* Reset input after send*/
-            this.messageInput.value = ''
-        }
-    }
-    handleTyping = () => {
-        /* Tell users when another user has at least started to write */
-        if (this.messageInput.value.length > 0) {
-            this.props.typing(this.ownerInput.value)
-        } else {
-            /* When there is no more character, the user no longer writes */
-            this.props.resetTyping(this.ownerInput.value)
-        }
-    }
-    render() {
-        /* If the chatbox state is loading, loading class for display */
-        let loadingClass = this.props.isLoading
-            ? 'chatApp__convButton--loading'
-            : ''
-        let sendButtonIcon = <span>&#x2709;</span>
-        return (
-            <form onSubmit={this.handleSendMessage}>
-                <input
-                    type="hidden"
-                    ref={owner => (this.ownerInput = owner)}
-                    value={this.props.owner}
-                />
-                <input
-                    type="hidden"
-                    ref={ownerAvatar => (this.ownerAvatarInput = ownerAvatar)}
-                    value={this.props.ownerAvatar}
-                />
-                <input
-                    type="text"
-                    ref={message => (this.messageInput = message)}
-                    className={'chatApp__convInput'}
-                    placeholder="Text message"
-                    onKeyDown={this.handleTyping}
-                    onKeyUp={this.handleTyping}
-                    tabIndex="0"
-                />
-                <div
-                    className={'chatApp__convButton ' + loadingClass}
-                    onClick={this.handleSendMessage}
-                >
-                    {sendButtonIcon}
-                </div>
-            </form>
-        )
-    }
-}
-
-/* MessageList component - contains all messages */
-function MessageList({ owner, messages }) {
-    return (
-        <div className={'chatApp__convTimeline'}>
-            {messages
-                .slice(0)
-                .reverse()
-                .map(messageItem => (
-                    <MessageItem
-                        key={messageItem.id}
-                        owner={owner}
-                        sender={messageItem.sender}
-                        senderAvatar={messageItem.senderAvatar}
-                        message={messageItem.message}
-                    />
-                ))}
-        </div>
-    )
-}
-
-/* MessageItem component - composed of a message and the sender's avatar */
-// TODO: make className optional for div.chatApp__convMessageValue
-function MessageItem({ owner, sender, senderAvatar, message }) {
-    /* message position formatting - right if I'm the author */
-    let messagePosition =
-        owner === sender
-            ? 'chatApp__convMessageItem--right'
-            : 'chatApp__convMessageItem--left'
-    return (
-        <div
-            className={
-                'chatApp__convMessageItem ' + messagePosition + ' clearfix'
-            }
-        >
-            <img
-                src={senderAvatar}
-                alt={sender}
-                className="chatApp__convMessageAvatar"
-            />
-            <div
-                className="chatApp__convMessageValue"
-                dangerouslySetInnerHTML={{ __html: message }}
-            />
-        </div>
-    )
-}
-
-/* ChatBox component - composed of Title, MessageList, InputMessage */
-function ChatBox({
-    owner,
-    messages,
-    ownerAvatar,
-    sendMessage,
-    typing,
-    resetTyping,
-}) {
-    const [isLoading, setIsLoading] = useState(false);
-    /* catch the sendMessage signal and update the loading state then continues the sending instruction */
-    const sendMessageLoading = (sender, senderAvatar, message) => {
-        setIsLoading(true)
-        sendMessage(sender, senderAvatar, message)
-        setTimeout(() => {
-            setIsLoading(false)
-        }, 400)
-    }
-    return (
-        <div className={'chatApp__conv'}>
-            <Title owner={owner} />
-            <MessageList owner={owner} messages={messages} />
-            <div className={'chatApp__convSendMessage clearfix'}>
-                <InputMessage
-                    isLoading={isLoading}
-                    owner={owner}
-                    ownerAvatar={ownerAvatar}
-                    sendMessage={sendMessage}
-                    sendMessageLoading={sendMessageLoading}
-                    typing={typing}
-                    resetTyping={resetTyping}
-                />
-            </div>
-        </div>
-    )
 }
 
 /* ChatRoom component - composed of multiple ChatBoxes */
@@ -214,8 +68,8 @@ class ChatRoom extends React.Component {
             self.sendMessage(self.state.username, self.state.avatar, msg)
         })
 
-        // TODO: switch back to prompt('Please tell me your name')
-        const username = '' + Math.random(); 
+        // testing: switch back to '' + Math.random(); 
+        const username = prompt('Please tell me your name')
         socket.emit('username', username)
         this.setState({ username })
     }
@@ -251,6 +105,9 @@ class ChatRoom extends React.Component {
         this.setState({ isTyping: stateTyping })
     }
     render() {
+        if (!this.state.username) {
+            return <p className='warning'>Please refresh the page and input your name</p>
+        }
         let messages = this.state.messages
         let isTyping = this.state.isTyping
         let sendMessage = this.sendMessage
@@ -264,7 +121,7 @@ class ChatRoom extends React.Component {
         return (
             <div className={'chatApp__room'}>
                 <ChatBox
-                    // TODO: ensure this is unique
+                    socket={socket}
                     key={user.name}
                     owner={user.name}
                     ownerAvatar={user.avatar}

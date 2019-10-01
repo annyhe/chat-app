@@ -36,6 +36,7 @@ app.get('/', function(req, res) {
 app.use(express.static('public'))
 
 io.sockets.on('connection', function(socket) {
+    // TODO: create specific user name and avatar url for @quote, @joke, and @pic
     let avatar = ''
     socket.on('username', function(username) {
         if (username) {
@@ -119,7 +120,7 @@ io.sockets.on('connection', function(socket) {
                 .catch(console.log)
         }
 
-        if (username) {
+        if (socket.username) {
             db.run(
                 `INSERT INTO ChatMessages(username, message, avatar) VALUES(?, ?, ?)`,
                 [socket.username, message, avatar],

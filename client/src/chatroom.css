@@ -12,6 +12,11 @@ body {
     font-family: 'Quicksand', sans-serif;
     letter-spacing: -0.23px;
 }
+.warning {
+    font-size: 4rem;
+    color: white;
+    text-align: center;
+}
 .chatApp__loaderWrapper {
     margin: 80px auto;
     text-align: center;

@@ -14,8 +14,11 @@ TODO
 Refactor database to 2 tables:
 1. Users: ID, username text, avatar text
 2. Messages: ID, ID of username, message text
+
+- UI: show which users are there, to disallow multiple users
 - sticky footer, move component outside of chat
 - @picCat: on the other side, should not have the blue background
+- disallow users with same name to join from the UI, and the database: username needs be unique field
 - specific users and avatars for quoteBot, jokeBot, and picBot
 - add screenshots to READme
 - add API, UI tests
