@@ -20,16 +20,14 @@ let db = new sqlite3.Database(DB_PATH, err => {
     }
     console.log('Connected to the ' + DB_PATH + ' SQlite database.')
 })
-/**
- * Uncomment this section to create the messages table
-db.run(
-    "CREATE TABLE IF NOT EXISTS ChatMessages(id INTEGER PRIMARY KEY AUTOINCREMENT, username TEXT, message text)",
-    function() {
-      console.log("successful");
-    }
-  );
 
- */ 
+// Uncomment this section to create table in sqlite
+// db.run(
+//     'CREATE TABLE IF NOT EXISTS ChatMessages(id INTEGER PRIMARY KEY AUTOINCREMENT, username TEXT, message text)',
+//     function() {
+//         console.log('successful')
+//     }
+// )
 
 app.get('/', function(req, res) {
     res.send(path.join(__dirname + '/index.html'))
@@ -61,22 +59,21 @@ io.sockets.on('connection', function(socket) {
 
         let url = ''
         let callback // will be a function
-        if (message.includes(FLAG.quote)) { 
+        if (message.includes(FLAG.quote)) {
             console.log('GET quote')
             url = QUOTE_URL
-            callback = json => { 
-                    io.emit("notify everyone", json.content + ' By ' + json.author)                    
-                }
+            callback = json => {
+                io.emit('notify everyone', json.content + ' By ' + json.author)
+            }
         } else if (message.includes(FLAG.joke)) {
             url = JOKE_URL
-            callback = (json) => {
+            callback = json => {
                 if (json.status === 200) {
                     // console.log(json.joke)
-                    io.emit("notify everyone", json.joke)                    
+                    io.emit('notify everyone', json.joke)
                 } else {
                     console.log('GET joke failed.')
                 }
-                
             }
         }
 
