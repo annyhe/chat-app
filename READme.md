@@ -1,12 +1,18 @@
 # Real time chat app using Socket.io, Nodejs
 
+Overview
 - Database: use **sqlite** for testing. Stores username and messages
 - Tested on Chrome
 - Works with multi-user, concurrent sessions
-- Type in @picIMAGE_QUERY, @quote to get random famous quote, or @joke to get random joke
+- Type in **@picIMAGE_QUERY**, **@quote** to get random famous quote, or **@joke** to get random joke
+
+Credit 
+- UI based on these React components https://codepen.io/swaibu/pen/OJLZjLb?editors=0010
+- socket.io and express setup based on https://itnext.io/build-a-group-chat-app-in-30-lines-using-node-js-15bfe7a2417b
 
 TODO
 - UI can be better, ie. make it more obvious who is talking. Anyone other than the current person should be in a separate column
+- add screenshots to READme
 - add API, UI tests
 
 ### Setup
