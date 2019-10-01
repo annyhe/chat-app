@@ -12,10 +12,10 @@ Credit
 
 TODO
 - make input expand to entire width of the box
-- make "X's display" dynamic
+- make MessageList component handle images
+- need list of users? or only need to figure out the current one?
 - avatar: change to random one, non-gender specific
 - remove default messages in ChatRoom component
-- add the socket.io part to Chatroom component
 - add screenshots to READme
 - add API, UI tests
 

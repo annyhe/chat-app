@@ -1,7 +1,9 @@
 import React, { useEffect } from 'react'
-import openSocket from 'socket.io-client'
 import './App.css'
+import './chatroom.css'
+import openSocket from 'socket.io-client'
 const socket = openSocket('http://localhost:8080')
+
 const FLAG = {
     pic: { tag: '@pic', url: 'https://source.unsplash.com/random/800x600?' },
 }
@@ -26,11 +28,10 @@ function App() {
             // GET the image
             let tag = FLAG.pic.tag
             if (msg.includes(tag)) {
-                getImage(msg, tag)
-                .then (url => {
+                getImage(msg, tag).then(url => {
                     const imageEl = document.createElement('img')
                     imageEl.src = url
-                    document.getElementById('messages').appendChild(imageEl)                    
+                    document.getElementById('messages').appendChild(imageEl)
                 })
             }
         })
@@ -51,13 +52,15 @@ function App() {
         // ask username
         const username = prompt('Please tell me your name')
         socket.emit('username', username)
-    })
+    }, [])
+
     const onSubmitForm = e => {
         e.preventDefault() // prevents page reloading
         socket.emit('chat_message', document.getElementById('txt').value)
         document.getElementById('txt').value = ''
         return false
     }
+
     return (
         <div className="App">
             <ul id="messages"></ul>
