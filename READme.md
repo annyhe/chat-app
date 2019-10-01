@@ -4,10 +4,9 @@
 
 TODO
 - Extend to make it more slack-like. Ie. @inspiration to get inspirational message, or @imageCat to get image of a cat from unsplash
-- convert jQuery on the front to React
 - UI can be better, ie. make it more obvious who is talking. Anyone other than the current person should be in a separate column
-- no react
-- no tests
+- @quote needs to return parameterized quote, not only random quote, which seems to remain identical from one request to the next
+- add API, UI tests
 
 ### Learned
 
